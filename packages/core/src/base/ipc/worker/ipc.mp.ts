@@ -7,10 +7,16 @@ import { ClientConnectionEvent, IPCServer } from '../common/ipc';
 import { Protocol } from '../common/ipc.mp';
 import { Event } from '../../common/event';
 
-type Command = {
-  command: string
+export type IPCSetupAction = {
+  command: IPCSetupCommand
   arg: string
 }
+
+export enum IPCSetupCommand {
+  createMessageChannel = 'createMessageChannel',
+  createMessageChannelResult = 'createMessageChannelResult'
+}
+
 /**
  * An implementation of a `IPCServer` on top of MessagePort style IPC communication.
  * The clients register themselves via Electron IPC transfer.
@@ -24,7 +30,7 @@ export class Server extends IPCServer {
     //
     // The `nonce` is included so that the main side has a chance to
     // correlate the response back to the sender.
-    const onCreateMessageChannel = Event.fromDOMEventEmitter<Command | null>(self, 'message', (e: MessageEvent) => {
+    const onCreateMessageChannel = Event.fromDOMEventEmitter<IPCSetupAction | null>(self, 'message', (e: MessageEvent) => {
       try {
         return JSON.parse(e.data);
       } catch {
@@ -33,7 +39,7 @@ export class Server extends IPCServer {
     });
 
     return Event.map(Event.filter(onCreateMessageChannel, command => {
-      return !!command && command.command === 'mte:createMessageChannel';
+      return !!command && command.command === IPCSetupCommand.createMessageChannel;
     }), (input: any) => {
 
       // Create a new pair of ports and protocol for this connection
@@ -53,7 +59,7 @@ export class Server extends IPCServer {
       // transferables like the `MessagePort` cannot be transferred
       // over preload scripts when `contextIsolation: true`
       self.postMessage(JSON.stringify({
-        command: 'mte:createMessageChannelResult',
+        command: IPCSetupCommand.createMessageChannelResult,
         arg: input.arg
       }), {
         transfer: [outgoingPort]

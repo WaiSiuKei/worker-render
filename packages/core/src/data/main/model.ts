@@ -1,5 +1,6 @@
 import { Client } from '../../base/ipc/browser/ipc.mp';
 import { getDelayedChannel, IChannel, IServerChannel } from '../../base/ipc/common/ipc';
+import { IPCSetupCommand } from '../../base/ipc/worker/ipc.mp';
 import ModelInWorker from '../worker/model?worker';
 import { Event } from '../../base/common/event';
 
@@ -15,7 +16,7 @@ export class MainThreadModel {
 
   async connect(channelName: string): Promise<Client> {
     this.model.postMessage(JSON.stringify({
-      command: 'mte:createMessageChannel',
+      command: IPCSetupCommand.createMessageChannel,
       arg: channelName
     }));
     // Wait until the window has returned the `MessagePort`
@@ -24,7 +25,7 @@ export class MainThreadModel {
     const onMessageChannelResult = Event.fromDOMEventEmitter<MessageEvent>(this.model, 'message');
     const e = await Event.toPromise(Event.once(Event.filter(onMessageChannelResult, e => {
       const data = JSON.parse(e.data);
-      return data.command === 'mte:createMessageChannelResult' && data.arg === channelName;
+      return data.command === IPCSetupCommand.createMessageChannelResult && data.arg === channelName;
     })));
 
     return new Client(e.ports[0], channelName);

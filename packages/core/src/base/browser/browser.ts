@@ -6,53 +6,6 @@
 import { Emitter, Event } from '../common/event';
 import { Disposable, markAsSingleton } from '../common/lifecycle';
 
-class WindowManager {
-  public static readonly INSTANCE = new WindowManager();
-
-  // --- Zoom Level
-  private _zoomLevel = 0;
-
-  public getZoomLevel(): number {
-    return this._zoomLevel;
-  }
-
-  public setZoomLevel(zoomLevel: number, isTrusted: boolean): void {
-    if (this._zoomLevel === zoomLevel) {
-      return;
-    }
-    this._zoomLevel = zoomLevel;
-  }
-
-  // --- Zoom Factor
-  private _zoomFactor = 1;
-
-  public getZoomFactor(): number {
-    return this._zoomFactor;
-  }
-
-  public setZoomFactor(zoomFactor: number): void {
-    this._zoomFactor = zoomFactor;
-  }
-
-  // --- Fullscreen
-  private _fullscreen = false;
-  private readonly _onDidChangeFullscreen = new Emitter<void>();
-
-  public readonly onDidChangeFullscreen: Event<void> = this._onDidChangeFullscreen.event;
-  public setFullscreen(fullscreen: boolean): void {
-    if (this._fullscreen === fullscreen) {
-      return;
-    }
-
-    this._fullscreen = fullscreen;
-    this._onDidChangeFullscreen.fire();
-  }
-
-  public isFullscreen(): boolean {
-    return this._fullscreen;
-  }
-}
-
 /**
  * See https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio#monitoring_screen_resolution_or_zoom_level_changes
  */
@@ -165,30 +118,6 @@ export function addMatchMediaChangeListener(
  * and any measurements need to be discarded for example when a window is moved from a monitor to another.
  */
 export const PixelRatio = new PixelRatioFacade();
-
-/** A zoom index, e.g. 1, 2, 3 */
-export function setZoomLevel(zoomLevel: number, isTrusted: boolean): void {
-  WindowManager.INSTANCE.setZoomLevel(zoomLevel, isTrusted);
-}
-export function getZoomLevel(): number {
-  return WindowManager.INSTANCE.getZoomLevel();
-}
-
-/** The zoom scale for an index, e.g. 1, 1.2, 1.4 */
-export function getZoomFactor(): number {
-  return WindowManager.INSTANCE.getZoomFactor();
-}
-export function setZoomFactor(zoomFactor: number): void {
-  WindowManager.INSTANCE.setZoomFactor(zoomFactor);
-}
-
-export function setFullscreen(fullscreen: boolean): void {
-  WindowManager.INSTANCE.setFullscreen(fullscreen);
-}
-export function isFullscreen(): boolean {
-  return WindowManager.INSTANCE.isFullscreen();
-}
-export const onDidChangeFullscreen = WindowManager.INSTANCE.onDidChangeFullscreen;
 
 const userAgent = navigator.userAgent;
 

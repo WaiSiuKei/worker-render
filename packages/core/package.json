@@ -14,5 +14,26 @@
     "typescript": "5.2.2",
     "vite": "3.2.4",
     "vite-plugin-checker": "0.4.8"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "development": "./src",
+        "default": "./dist/es/index.mjs"
+      }
+    },
+    "./*": {
+      "import": {
+        "development": "./src/*",
+        "default": "./dist/es/*.mjs"
+      }
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./src/*"
+      ]
+    }
   }
 }
