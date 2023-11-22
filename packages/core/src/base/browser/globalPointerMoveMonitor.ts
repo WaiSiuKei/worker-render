@@ -3,8 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import * as dom from '@neditor/core/base/browser/dom';
-import { DisposableStore, IDisposable, toDisposable } from '@neditor/core/base/common/lifecycle';
+import * as dom from './dom';
+import { DisposableStore, IDisposable, toDisposable } from '../common/lifecycle';
 
 export interface IPointerMoveEventData {
   leftButton: boolean;

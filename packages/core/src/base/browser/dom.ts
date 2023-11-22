@@ -2,7 +2,7 @@ import { Disposable, DisposableStore, IDisposable } from '../common/lifecycle';
 import { TimeoutTimer } from '../common/async';
 import * as platform from '../common/platform';
 import { onUnexpectedError } from '../common/errors';
-import * as event from '@neditor/core/base/common/event';
+import * as event from '../common/event';
 import { IKeyboardEvent, StandardKeyboardEvent } from './keyboardEvent';
 import { KeyCode } from '../common/keyCodes';
 import { IMouseEvent, StandardMouseEvent } from './mouseEvent';

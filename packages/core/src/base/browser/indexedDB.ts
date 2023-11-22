@@ -3,10 +3,10 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *-------------------------------------------------------------------------------------------- */
 
-import { toErrorMessage } from '@neditor/core/base/common/errorMessage';
-import { getErrorMessage } from '@neditor/core/base/common/errors';
-import { mark } from '@neditor/core/base/common/performance';
-import { isArray } from '@neditor/core/base/common/type';
+import { toErrorMessage } from '../common/errorMessage';
+import { getErrorMessage } from '../common/errors';
+import { mark } from '../common/performance';
+import { isArray } from '../common/type';
 
 class MissingStoresError extends Error {
   constructor(readonly db: IDBDatabase) {

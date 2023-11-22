@@ -3,8 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *-------------------------------------------------------------------------------------------- */
 
-import * as arrays from '@neditor/core/base/common/array';
-import * as types from '@neditor/core/base/common/type';
+import * as arrays from './array';
+import * as types from './type';
 import nls from '../nls/nls';
 
 function exceptionToErrorMessage(exception: any, verbose: boolean): string {

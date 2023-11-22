@@ -3,7 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *-------------------------------------------------------------------------------------------- */
 
-import { globals } from '@neditor/core/base/common/platform';
+
+import { globals } from './platform';
 
 const hasPerformanceNow = globals.performance && typeof globals.performance.now === 'function';
 

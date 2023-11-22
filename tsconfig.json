@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "module": "ES2015",
+    "moduleResolution": "node",
+    "target": "ESNext",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES6",
+      "ESNext",
+      "WebWorker"
+    ],
+    "sourceMap": false,
+    "declaration": false,
+    "newLine": "LF",
+    "allowJs": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "downlevelIteration": true,
+    "isolatedModules": true,
+    "types": [
+      "vite/client"
+    ],
+    "strict": true
+  },
+  "include": [
+    "base"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*/lib",
+    "**/*/dist",
+    "postcss.config.js",
+    "tailwind.config.js",
+    "vite.config.ts"
+  ]
+}

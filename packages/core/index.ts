@@ -1,5 +1,5 @@
 import 'normalize.css';
 
-import { MainThreadModel } from './data/main/model';
+import { MainThreadModel } from './src/data/main/model';
 
 new MainThreadModel();

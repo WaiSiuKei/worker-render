@@ -7,11 +7,21 @@
     "dev": "pnpm -F core start"
   },
   "workspaces": [
-    "packages/*",
-    "third_party/*"
+    "packages/*"
   ],
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.26.0",
+    "@typescript-eslint/parser": "^4.26.0",
+    "eslint": "^7.27.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-prettier-standard": "^4.0.1",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-standard": "^5.0.0",
+    "prettier": "^2.3.0",
+    "prettier-config-standard": "^4.0.0",
+    "typescript": "5"
+  }
 }

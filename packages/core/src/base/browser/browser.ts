@@ -3,8 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *-------------------------------------------------------------------------------------------- */
 
-import { Emitter, Event } from '@neditor/core/base/common/event';
-import { Disposable, markAsSingleton } from '@neditor/core/base/common/lifecycle';
+import { Emitter, Event } from '../common/event';
+import { Disposable, markAsSingleton } from '../common/lifecycle';
 
 class WindowManager {
   public static readonly INSTANCE = new WindowManager();

@@ -3,9 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *-------------------------------------------------------------------------------------------- */
 
-import { once } from '@neditor/core/base/common/functional';
-import { Iterable } from '@neditor/core/base/common/iterator';
-import { DCHECK } from '../check';
+import { once } from './functional';
+import { Iterable } from './iterator';
+import { CHECK } from './check';
 
 /**
  * Enables logging of potentially leaked disposables.
@@ -414,7 +414,7 @@ export abstract class ReferenceCollection<T> {
       return reference!.counter;
     };
     const copy = (): ICopyableReference<T> => {
-      DCHECK(reference);
+      CHECK(reference);
       reference.counter++;
       return { object, dispose: createDispose(), copy: copy, count };
     };
