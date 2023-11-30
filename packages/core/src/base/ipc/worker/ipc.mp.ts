@@ -30,16 +30,10 @@ export class Server extends IPCServer {
     //
     // The `nonce` is included so that the main side has a chance to
     // correlate the response back to the sender.
-    const onCreateMessageChannel = Event.fromDOMEventEmitter<IPCSetupAction | null>(self, 'message', (e: MessageEvent) => {
-      try {
-        return JSON.parse(e.data);
-      } catch {
-        return null;
-      }
-    });
+    const onCreateMessageChannel = Event.fromDOMEventEmitter<IPCSetupAction | null>(self, 'message', (e: MessageEvent) => e.data);
 
-    return Event.map(Event.filter(onCreateMessageChannel, command => {
-      return !!command && command.command === IPCSetupCommand.createMessageChannel;
+    return Event.map(Event.filter(onCreateMessageChannel, data => {
+      return !!data && data.command === IPCSetupCommand.createMessageChannel;
     }), (input: any) => {
 
       // Create a new pair of ports and protocol for this connection
@@ -58,10 +52,10 @@ export class Server extends IPCServer {
       // Note: we intentionally use `electron` APIs here because
       // transferables like the `MessagePort` cannot be transferred
       // over preload scripts when `contextIsolation: true`
-      self.postMessage(JSON.stringify({
+      self.postMessage({
         command: IPCSetupCommand.createMessageChannelResult,
         arg: input.arg
-      }), {
+      }, {
         transfer: [outgoingPort]
       });
 
