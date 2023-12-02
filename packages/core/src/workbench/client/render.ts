@@ -11,4 +11,7 @@ export class RenderService implements IRenderClient {
   echo() {
     return this.channel.call<string>('echo');
   }
+  render(size: { width: number, height: number }) {
+    return this.channel.call<void>('render', size);
+  }
 }

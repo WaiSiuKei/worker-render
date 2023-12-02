@@ -1,5 +1,5 @@
 import 'normalize.css';
 
-import { MainThreadModel } from './src/workbench/main';
+import { Application } from './src/workbench/main';
 
-new MainThreadModel();
+new Application();
