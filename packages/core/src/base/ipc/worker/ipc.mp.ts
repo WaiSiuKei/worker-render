@@ -14,7 +14,8 @@ export type IPCSetupAction = {
 
 export enum IPCSetupCommand {
   createMessageChannel = 'createMessageChannel',
-  createMessageChannelResult = 'createMessageChannelResult'
+  createMessageChannelResult = 'createMessageChannelResult',
+  transferMessageChannelResult = 'transferMessageChannelResult',
 }
 
 /**
