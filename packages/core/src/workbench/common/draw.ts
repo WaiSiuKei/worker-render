@@ -15,7 +15,6 @@ export async function run(
   const draw = async () => {
     const particles = await model.getParticles();
     pending = undefined;
-    console.log('herer');
     const patriclesNum = particles.length;
     ctx.clearRect(0, 0, w, h);
     ctx.globalCompositeOperation = 'lighter';
