@@ -92,9 +92,10 @@ export class Application {
     return getDelayedChannel(connection.then(connection => connection.getChannel(channelName)));
   }
 
-  start() {
-    run(this.ctx, this.mainCanvas.width, this.mainCanvas.height);
+  async start() {
+    await this.modelService.load({ w: this.mainCanvas.width, h: this.mainCanvas.height });
     this.renderService.render({ width: this.mainCanvas.width, height: this.mainCanvas.height });
+    run(this.ctx, this.modelService, this.mainCanvas.width, this.mainCanvas.height);
     (function loop() {
       const ret = longTask();
       Reflect.set(window, 'test', ret);
@@ -105,7 +106,7 @@ export class Application {
 
 function longTask() {
   let count = 1;
-  for (let i = 0; i < 8e7; i++) {
+  for (let i = 0; i < 2e8; i++) {
     count += i;
   }
   return count;

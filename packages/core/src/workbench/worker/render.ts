@@ -19,11 +19,12 @@ class RenderInWorker {
   private onModelConnected = new DeferredPromise<void>();
   private onCanvasConnected = new DeferredPromise<void>();
   private renderService!: RenderService;
+  private modelService: ModelService;
   constructor() {
     this.initService();
     this.withModelConnection = this.connectModel();
-    const modelService = new ModelService(this.getChannel(this.withModelConnection, 'model'));
-    modelService.echo().then(() => {
+    this.modelService = new ModelService(this.getChannel(this.withModelConnection, 'model'));
+    this.modelService.echo().then(() => {
       this.onModelConnected.complete();
     });
   }
@@ -38,7 +39,7 @@ class RenderInWorker {
       const { canvas } = e.data;
       const ctx = canvas.getContext('2d')!;
 
-      this.renderService = new RenderService(ctx);
+      this.renderService = new RenderService(ctx, this.modelService);
       this.server.registerChannel('render', this.renderService);
       this.onCanvasConnected.complete();
     });

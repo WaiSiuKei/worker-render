@@ -1,20 +1,22 @@
 import { Emitter, Event } from '../../base/common/event';
 import { NOTIMPLEMENTED } from '../../base/common/notreached';
 import { IServerChannel } from '../../base/ipc/common/ipc';
+import { IModelClient } from '../../platform/model/client/model';
+import { Particle } from '../../platform/model/server/model';
 import { IRenderServer } from '../../platform/render/server/render';
 import { run } from '../common/draw';
 
 export class RenderService implements IServerChannel, IRenderServer {
   private _onUpdate = new Emitter<void>();
-  constructor(private ctx: OffscreenCanvasRenderingContext2D) {}
+  constructor(private ctx: OffscreenCanvasRenderingContext2D, private model: IModelClient) {}
 
   get onUpdate() {return this._onUpdate.event;}
   echo(): string {
     return 'hello render!';
   }
 
-  render(size: { width: number, height: number }) {
-    run(this.ctx, size.width, size.height);
+  async render(size: { width: number, height: number }) {
+    run(this.ctx, this.model, size.width, size.height);
   }
 
   listen(context: any, event: string): Event<any> {
