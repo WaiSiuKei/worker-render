@@ -4,11 +4,12 @@ import { IServerChannel } from '../../base/ipc/common/ipc';
 import { IModelClient } from '../../platform/model/client/model';
 import { Particle } from '../../platform/model/server/model';
 import { IRenderServer } from '../../platform/render/server/render';
+import { Panel } from '../../platform/stat/browser/stat';
 import { run } from '../common/draw';
 
 export class RenderService implements IServerChannel, IRenderServer {
   private _onUpdate = new Emitter<void>();
-  constructor(private ctx: OffscreenCanvasRenderingContext2D, private model: IModelClient) {}
+  constructor(private ctx: OffscreenCanvasRenderingContext2D, private model: IModelClient, private panel: Panel) {}
 
   get onUpdate() {return this._onUpdate.event;}
   echo(): string {
@@ -16,7 +17,7 @@ export class RenderService implements IServerChannel, IRenderServer {
   }
 
   async render(size: { width: number, height: number }) {
-    run(this.ctx, this.model, size.width, size.height);
+    run(this.ctx, this.model, size.width, size.height, this.panel);
   }
 
   listen(context: any, event: string): Event<any> {

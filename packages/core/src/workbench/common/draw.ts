@@ -1,5 +1,7 @@
+import { CancellationToken, CancellationTokenSource } from '../../base/common/cancellation';
 import { IModelClient } from '../../platform/model/client/model';
 import { Particle } from '../../platform/model/server/model';
+import { Panel } from '../../platform/stat/browser/stat';
 
 function findDistance(p1: Particle, p2: Particle) {
   return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
@@ -10,11 +12,11 @@ export async function run(
   model: IModelClient,
   w: number,
   h: number,
+  panel?: Panel,
 ) {
-  let pending: { frame: number } | undefined;
-  const draw = async () => {
-    const particles = await model.getParticles();
-    pending = undefined;
+  let pending: number | undefined;
+  panel?.begin();
+  const draw = (particles: Particle[]) => {
     const patriclesNum = particles.length;
     ctx.clearRect(0, 0, w, h);
     ctx.globalCompositeOperation = 'lighter';
@@ -49,12 +51,12 @@ export async function run(
       ctx.stroke();
       ctx.closePath();
     }
+    panel?.update();
   };
-  model.onTick(() => {
+  model.onTick((data) => {
     if (pending) {
-      cancelAnimationFrame(pending.frame);
+      cancelAnimationFrame(pending);
     }
-    const frame = requestAnimationFrame(() => draw());
-    pending = { frame };
+    pending = requestAnimationFrame(() => draw(data));
   });
 }

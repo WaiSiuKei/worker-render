@@ -4,13 +4,14 @@ import { Client } from '../../base/ipc/browser/ipc.mp';
 import { getDelayedChannel, IChannel } from '../../base/ipc/common/ipc';
 import { IPCSetupCommand, Server } from '../../base/ipc/worker/ipc.mp';
 import Debug from 'debug';
+import { Panel } from '../../platform/stat/browser/stat';
 import { ModelService } from '../client/model';
 import { RenderService } from '../server/render';
 
 const debug = Debug('editor:re');
 debug.enabled = true;
 
-type CanvasPayload = { canvas: OffscreenCanvas }
+type CanvasPayload = { canvas: OffscreenCanvas, stat: OffscreenCanvas }
 type PortPayload = { port: MessagePort, channelName: string }
 
 class RenderInWorker {
@@ -36,10 +37,11 @@ class RenderInWorker {
   initService() {
     const onCanvasReceived = Event.filter(Event.fromDOMEventEmitter<MessageEvent<CanvasPayload>>(self, 'message'), e => !!e.data.canvas);
     Event.once(onCanvasReceived)(e => {
-      const { canvas } = e.data;
+      const { canvas, stat } = e.data;
       const ctx = canvas.getContext('2d')!;
 
-      this.renderService = new RenderService(ctx, this.modelService);
+      const panel = new Panel(stat)
+      this.renderService = new RenderService(ctx, this.modelService, panel);
       this.server.registerChannel('render', this.renderService);
       this.onCanvasConnected.complete();
     });

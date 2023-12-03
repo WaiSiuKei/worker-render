@@ -11,7 +11,7 @@ export interface Particle {
 
 export interface IModelServer {
   onUpdate: Event<void>;
-  onTick: Event<void>;
+  onTick: Event<Particle[]>;
   echo(): string;
   load(size: { w: number, h: number }): void;
   getParticles(): Particle[];

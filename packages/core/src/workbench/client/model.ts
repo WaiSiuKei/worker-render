@@ -5,7 +5,7 @@ import { Particle } from '../../platform/model/server/model';
 
 export class ModelService implements IModelClient {
   onUpdate: Event<void>;
-  onTick: Event<void>;
+  onTick: Event<Particle[]>;
   constructor(private channel: IChannel) {
     this.onUpdate = this.channel.listen('onUpdate');
     this.onTick = this.channel.listen('onTick');

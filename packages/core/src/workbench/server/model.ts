@@ -5,7 +5,7 @@ import { IModelServer, Particle } from '../../platform/model/server/model';
 
 export class ModelService implements IModelServer {
   private _onUpdate = new Emitter<void>();
-  private _onTick = new Emitter<void>();
+  private _onTick = new Emitter<Particle[]>();
   private _particles: Array<Particle> = [];
 
   get onUpdate() {return this._onUpdate.event;}
@@ -41,7 +41,7 @@ export class ModelService implements IModelServer {
         if (temp.y > h) temp.y = 0;
         if (temp.y < 0) temp.y = h;
       }
-      this._onTick.fire();
+      this._onTick.fire(this.getParticles());
       requestAnimationFrame(tick);
     };
     tick();

@@ -1,6 +1,7 @@
 import { Client } from '../../base/ipc/browser/ipc.mp';
 import { getDelayedChannel, IChannel } from '../../base/ipc/common/ipc';
 import { IPCSetupCommand } from '../../base/ipc/worker/ipc.mp';
+import { Panel, preparePanel } from '../../platform/stat/browser/stat';
 import { ModelService } from '../client/model';
 import { RenderService } from '../client/render';
 import { run } from '../common/draw';
@@ -19,7 +20,7 @@ export class Application {
   modelService: ModelService;
   renderService: RenderService;
   mainCanvas: HTMLCanvasElement;
-  ctx: CanvasRenderingContext2D;
+  panel: Panel;
   constructor() {
     this.model = new ModelInWorker();
     this.render = new RenderInWorker();
@@ -37,10 +38,18 @@ export class Application {
     mainCanvas.height = rect.height;
     Object.assign(renderCanvas.style, { width: rect.width + 'px', height: rect.height + 'px' });
     Object.assign(mainCanvas.style, { width: rect.width + 'px', height: rect.height + 'px' });
+
+    const mainStatCanvas = document.querySelector('#mainStat') as HTMLCanvasElement;
+    const renderStatCanvas = document.querySelector('#renderStat') as HTMLCanvasElement;
+    preparePanel(mainStatCanvas);
+    preparePanel(renderStatCanvas);
+    this.panel = new Panel(mainStatCanvas);
+
     const offscreen = renderCanvas.transferControlToOffscreen();
-    this.render.postMessage({ canvas: offscreen }, [offscreen]);
+    const statOffscreen = renderStatCanvas.transferControlToOffscreen();
+    this.render.postMessage({ canvas: offscreen, stat: statOffscreen }, [offscreen, statOffscreen]);
+
     this.mainCanvas = mainCanvas;
-    this.ctx = mainCanvas.getContext('2d')!;
     this.init();
   }
 
@@ -95,12 +104,12 @@ export class Application {
   async start() {
     await this.modelService.load({ w: this.mainCanvas.width, h: this.mainCanvas.height });
     this.renderService.render({ width: this.mainCanvas.width, height: this.mainCanvas.height });
-    run(this.ctx, this.modelService, this.mainCanvas.width, this.mainCanvas.height);
-    (function loop() {
+    run(this.mainCanvas.getContext('2d')!, this.modelService, this.mainCanvas.width, this.mainCanvas.height, this.panel);
+    ;(function loop() {
       const ret = longTask();
       Reflect.set(window, 'test', ret);
       requestAnimationFrame(loop);
-    })();
+    }());
   }
 }
 
