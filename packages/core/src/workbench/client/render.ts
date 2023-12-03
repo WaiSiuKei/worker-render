@@ -14,4 +14,7 @@ export class RenderService implements IRenderClient {
   render(size: { width: number, height: number }) {
     return this.channel.call<void>('render', size);
   }
+  toggleLongTask() {
+    return this.channel.call<void>('toggleLongTask');
+  }
 }

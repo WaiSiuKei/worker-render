@@ -34,7 +34,31 @@ export class RenderService implements IServerChannel, IRenderServer {
         return this.echo();
       case 'render':
         return this.render(arg);
+      case 'toggleLongTask':
+        return this.toggleLongTask();
     }
     NOTIMPLEMENTED();
   }
+  runningLongTask: number | undefined;
+  toggleLongTask() {
+    if (this.runningLongTask) {
+      cancelAnimationFrame(this.runningLongTask);
+      this.runningLongTask = undefined;
+    } else {
+      const loop = () => {
+        const ret = longTask();
+        Reflect.set(self, 'test', ret);
+        this.runningLongTask = requestAnimationFrame(loop);
+      };
+      loop();
+    }
+  }
+}
+
+function longTask() {
+  let count = 1;
+  for (let i = 0; i < 2e8; i++) {
+    count += i;
+  }
+  return count;
 }

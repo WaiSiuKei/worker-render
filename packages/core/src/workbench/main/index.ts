@@ -51,10 +51,21 @@ export class Application {
 
     this.mainCanvas = mainCanvas;
     this.init();
+
+    const mainCheckbox = document.querySelector('#ltMain') as HTMLInputElement;
+    const renderCheckbox = document.querySelector('#ltRender') as HTMLInputElement;
+    mainCheckbox.addEventListener('change', () => {
+      this.toggleLongTask();
+    });
+    this.toggleLongTask();
+    renderCheckbox.addEventListener('change', () => {
+      this.renderService.toggleLongTask();
+    });
   }
 
   async init() {
     await this.connectModelAndRender();
+    await this.modelService.load({ w: this.mainCanvas.width, h: this.mainCanvas.height });
     this.start();
   }
 
@@ -102,14 +113,23 @@ export class Application {
   }
 
   async start() {
-    await this.modelService.load({ w: this.mainCanvas.width, h: this.mainCanvas.height });
     this.renderService.render({ width: this.mainCanvas.width, height: this.mainCanvas.height });
     run(this.mainCanvas.getContext('2d')!, this.modelService, this.mainCanvas.width, this.mainCanvas.height, this.panel);
-    ;(function loop() {
-      const ret = longTask();
-      Reflect.set(window, 'test', ret);
-      requestAnimationFrame(loop);
-    }());
+  }
+
+  runningLongTask: number | undefined;
+  toggleLongTask() {
+    if (this.runningLongTask) {
+      cancelAnimationFrame(this.runningLongTask);
+      this.runningLongTask = undefined;
+    } else {
+      const loop = () => {
+        const ret = longTask();
+        Reflect.set(window, 'test', ret);
+        this.runningLongTask = requestAnimationFrame(loop);
+      };
+      loop();
+    }
   }
 }
 
