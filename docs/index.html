@@ -1,0 +1,86 @@
+<head lang="zh-CN">
+  <meta charset="UTF-8">
+  <title>neditor</title>
+  <script type="text/javascript">
+  Error.stackTraceLimit = Infinity;
+  </script>
+  <style>
+  #root {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .canvas-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding: 10px 0;
+  }
+
+  .canvas-container > canvas {
+    background: #222;
+    box-sizing: border-box;
+    border: 2px solid black;
+    width: 100%;
+    flex-grow: 1;
+    box-shadow: inset 0 0 100px #4162a9;
+  }
+
+  .canvas-container > div {
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
+    align-items: center;
+    padding: 16px;
+  }
+
+  .canvas-container > div > div {
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+  }
+
+  * {
+    margin: 0
+  }
+  </style>
+  <script type="module" crossorigin src="./assets/index.6617a017.js"></script>
+  <link rel="stylesheet" href="./assets/index.809449d1.css">
+</head>
+<body>
+<div id="root">
+  <div class="canvas-container">
+    <div>
+      <div>
+        <h2>Rendered in main thread</h2>
+        <form>
+          <input type="checkbox" id="ltMain" name="lt" checked>
+          <label for="ltMain">Long task</label>
+        </form>
+      </div>
+      <canvas id="mainStat"></canvas>
+    </div>
+    <canvas id="mainCanvas"></canvas>
+  </div>
+  <div class="canvas-container">
+    <div>
+      <div>
+        <h2>Rendered in main worker</h2>
+        <form>
+          <input type="checkbox" id="ltRender" name="lt" value="true">
+          <label for="ltMain">Long task</label>
+        </form>
+      </div>
+      <canvas id="renderStat"></canvas>
+    </div>
+    <canvas id="renderCanvas"></canvas>
+  </div>
+</div>
+
+</body>
