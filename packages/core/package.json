@@ -4,12 +4,16 @@
   "private": true,
   "scripts": {
     "start": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "gen:js": "pbjs -t static-module -w es6 -o src/common/proto/person.js  src/common/proto/person.proto  --no-delimited --no-verify --no-typeurl --es6",
+    "gen:ts": "pbts -o src/common/proto/person.d.ts src/common/proto/person.js",
+    "gen": "npm run gen:js && npm run gen:ts"
   },
   "dependencies": {
     "normalize.css": "8",
     "debug": "4.3.4",
-    "@neditor/core": "workspace:*"
+    "@neditor/core": "workspace:*",
+    "protobufjs": "7.2.5"
   },
   "devDependencies": {
     "@types/debug": "4.1.12",
